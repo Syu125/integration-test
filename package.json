@@ -1,0 +1,10 @@
+{
+  "name": "integration-test",
+  "private": true,
+  "workspaces": [
+    "ai-tutor",
+    "course-assistant",
+    "q-lab",
+    "backend"
+  ]
+}
