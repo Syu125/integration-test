@@ -5,19 +5,18 @@ function CodeGenerator() {
 
   // This is the "Code" we want to send to the DB
   const generatedComponent = `
-import React from 'react';
-
-const NewComponent = () => {
+() => {
+  const [count, setCount] = React.useState(0);
   return (
-    <div style={{ padding: '20px', background: '#f0f0f0' }}>
-      <h1>Hello from the Database!</h1>
-      <p>This component was generated in App A.</p>
+    <div style={{ color: 'blue' }}>
+      <h2>Dynamic Component!</h2>
+      <button onClick={() => setCount(count + 1)}>
+        Clicks: {count}
+      </button>
     </div>
   );
-};
-
-export default NewComponent;
-  `;
+}
+`;
 
   const sendCodeToBackend = async () => {
     setStatus("Sending...");

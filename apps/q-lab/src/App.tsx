@@ -1,59 +1,48 @@
 import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
+import { LiveProvider, LiveEditor, LivePreview, LiveError } from "react-live";
 
-// Connect to the backend
 const socket = io("http://localhost:4000");
 
 function App() {
-  const [codeSnippet, setCodeSnippet] = useState("Waiting for code...");
-  const [status, setStatus] = useState("Connecting...");
+  const [codeSnippet, setCodeSnippet] = useState("");
 
   useEffect(() => {
-    // Check if we are actually connected
-    socket.on("connect", () => {
-      setStatus("Connected to Backend ✅");
-      console.log("Connected with ID:", socket.id);
-    });
-
-    // LISTENER: Must match the io.emit name in server.js exactly
-    socket.on("new-code-arrival", (data) => {
-      console.log("🚀 Data received in App B:", data);
+    // Listen for the event
+    socket.on("new-code-arrival", (data: any) => {
       setCodeSnippet(data.content);
     });
 
+    // CLEANUP: This must return a function or void
     return () => {
-      socket.off("connect");
       socket.off("new-code-arrival");
     };
-  }, []);
-
-  useEffect(() => {
-    // Fetch the last saved snippet from Postgres on load
-    fetch("http://localhost:4000/snippets")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.length > 0) setCodeSnippet(data[0].content);
-      });
-  }, []);
-
+  }, []); // Empty dependency array ensures this only runs once
   return (
-    <div style={{ padding: "20px", fontFamily: "monospace" }}>
-      <h1>App B: Receiver</h1>
-      <p>
-        Status: <strong>{status}</strong>
-      </p>
+    <div style={{ padding: "20px" }}>
+      <h1>Live Component Preview</h1>
 
-      <div
-        style={{
-          background: "#282c34",
-          color: "white",
-          padding: "20px",
-          borderRadius: "8px",
-        }}
-      >
-        <h3>Latest Code from DB:</h3>
-        <pre>{codeSnippet}</pre>
-      </div>
+      {codeSnippet ? (
+        <LiveProvider code={codeSnippet} noInline={false}>
+          <div
+            style={{ display: "flex", gap: "20px", border: "1px solid #ddd" }}
+          >
+            {/* The Code View (Editable if you want) */}
+            <div style={{ flex: 1, background: "#011627", padding: "10px" }}>
+              <LiveEditor />
+            </div>
+
+            {/* THE ACTUAL RENDERED COMPONENT */}
+            <div style={{ flex: 1, padding: "20px", background: "#fff" }}>
+              <h3>Output:</h3>
+              <LivePreview />
+              <LiveError style={{ color: "red", fontSize: "12px" }} />
+            </div>
+          </div>
+        </LiveProvider>
+      ) : (
+        <p>Waiting for code from App A...</p>
+      )}
     </div>
   );
 }
