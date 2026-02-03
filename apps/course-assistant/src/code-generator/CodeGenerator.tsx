@@ -139,30 +139,11 @@ function CodeGenerator() {
             padding: "10px",
             fontSize: "12px",
             overflow: "auto",
+            textAlign: "left",
           }}
         >
           {generatedComponent}
         </pre>
-      </div>
-
-      {/* NEW: THE BUILD CONSOLE */}
-      <div
-        style={{
-          flex: 1,
-          background: "#000",
-          color: "#0f0",
-          padding: "20px",
-          fontFamily: "monospace",
-          borderRadius: "8px",
-        }}
-      >
-        <h3>Build Console</h3>
-        <hr style={{ borderColor: "#333" }} />
-        {logs.map((log, i) => (
-          <div key={i} style={{ marginBottom: "5px" }}>
-            {log}
-          </div>
-        ))}
       </div>
     </div>
   );

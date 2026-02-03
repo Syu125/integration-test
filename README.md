@@ -7,6 +7,9 @@ To start demo:
 Backend pipeline flow:
 
 - Using `simple-git` to control the commit
+- TODO: need to create personal access token from git so that I can push automatically
+- TODO: local works but want to deploy and test with actual website
+- TODO: create a more detailed pipeline + agents to write unit tests and stuff
 
 Repo reference structure:
 
