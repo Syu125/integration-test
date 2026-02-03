@@ -4,6 +4,10 @@ To start demo:
 - Start q-lab: `cd .\apps\q-lab` && `npm run dev`
 - Start q-lab: `cd .\apps\course-assistant` && `npm run dev`
 
+Backend pipeline flow:
+
+- Using `simple-git` to control the commit
+
 Repo reference structure:
 
 ```
