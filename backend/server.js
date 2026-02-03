@@ -133,7 +133,7 @@ app.post("/run-pipeline", async (req, res) => {
 
     await git.add("./*");
     await git.commit(`Pipeline Update: ${filename}`);
-    // await git.push('origin', 'main'); // Uncomment this if App B has a remote repo
+    await git.push("origin", "main");
 
     // STEP 4: FINAL NOTIFICATION
     io.emit("new-code-arrival", { filename, content }); // Real-time preview update
