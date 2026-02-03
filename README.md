@@ -1,3 +1,9 @@
+To start demo:
+
+- Start db: `cd backend` && `node .\server.js` _Note: need local DB setup_
+- Start q-lab: `cd .\apps\q-lab` && `npm run dev`
+- Start q-lab: `cd .\apps\course-assistant` && `npm run dev`
+
 Repo reference structure:
 
 ```
