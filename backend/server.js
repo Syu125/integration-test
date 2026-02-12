@@ -120,10 +120,12 @@ app.post("/run-pipeline", async (req, res) => {
     runUnitTests(content);
 
     // STAGE 2: Git Branching
-    const branchName = "test-branch";
+    const branchName = `sync-${Date.now()}`;
     io.emit("pipeline-update", `🌿 Creating branch: ${branchName}...`);
-    await git.checkoutLocalBranch(branchName);
+    await git.checkout("main");
     await git.pull("origin", "main");
+
+    await git.checkoutLocalBranch(branchName);
 
     // --- DIRECTORY GUARD ---
     // This ensures the components/ folder exists before we write the file
@@ -131,7 +133,6 @@ app.post("/run-pipeline", async (req, res) => {
       __dirname,
       "../apps/course-assistant/src/components",
     );
-    const filePath = path.join(targetDir, filename);
 
     if (!fs.existsSync(targetDir)) {
       console.log(`📂 Creating missing directory: ${targetDir}`);
@@ -140,6 +141,14 @@ app.post("/run-pipeline", async (req, res) => {
     }
 
     await git.add("./*");
+
+    const status = await git.status();
+    if (status.staged.length === 0) {
+      throw new Error(
+        "No changes detected. The code is identical to what is already on GitHub.",
+      );
+    }
+
     await git.commit(`New Component: ${filename}`);
     await git.push("origin", branchName);
 
