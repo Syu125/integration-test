@@ -139,6 +139,10 @@ app.post("/run-pipeline", async (req, res) => {
       io.emit("pipeline-update", "📂 Creating missing components directory...");
       fs.mkdirSync(targetDir, { recursive: true });
     }
+    const filePath = path.join(
+      __dirname,
+      `../apps/course-assistant/src/components/${filename}`,
+    );
     fs.writeFileSync(filePath, content);
 
     await git.add("./*");
