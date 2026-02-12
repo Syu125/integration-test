@@ -137,8 +137,8 @@ app.post("/run-pipeline", async (req, res) => {
     // STAGE 3: Open Pull Request
     io.emit("pipeline-update", "📂 Opening Pull Request on GitHub...");
     const pr = await octokit.pulls.create({
-      owner: "YOUR_USERNAME",
-      repo: "YOUR_REPO_NAME",
+      owner: "Syu125",
+      repo: "integration-test",
       title: `Merge New Component: ${filename}`,
       head: branchName,
       base: "main",
