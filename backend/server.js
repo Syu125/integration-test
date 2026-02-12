@@ -120,12 +120,13 @@ app.post("/run-pipeline", async (req, res) => {
     runUnitTests(content);
 
     // STAGE 2: Git Branching
+    const branchName = "test-branch";
     io.emit("pipeline-update", `🌿 Creating branch: ${branchName}...`);
     await git.checkoutLocalBranch(branchName);
 
     const filePath = path.join(
       __dirname,
-      `../app-receiver/src/components/${filename}`,
+      `../apps/course-assistant/src/components/${filename}`,
     );
     fs.writeFileSync(filePath, content);
 
