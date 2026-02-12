@@ -123,12 +123,21 @@ app.post("/run-pipeline", async (req, res) => {
     const branchName = "test-branch";
     io.emit("pipeline-update", `🌿 Creating branch: ${branchName}...`);
     await git.checkoutLocalBranch(branchName);
+    await git.pull("origin", "main");
 
-    const filePath = path.join(
+    // --- DIRECTORY GUARD ---
+    // This ensures the components/ folder exists before we write the file
+    const targetDir = path.join(
       __dirname,
-      `../apps/course-assistant/src/components/${filename}`,
+      "../apps/course-assistant/src/components",
     );
-    fs.writeFileSync(filePath, content);
+    const filePath = path.join(targetDir, filename);
+
+    if (!fs.existsSync(targetDir)) {
+      console.log(`📂 Creating missing directory: ${targetDir}`);
+      io.emit("pipeline-update", "📂 Creating missing components directory...");
+      fs.mkdirSync(targetDir, { recursive: true });
+    }
 
     await git.add("./*");
     await git.commit(`New Component: ${filename}`);
