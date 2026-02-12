@@ -34,6 +34,13 @@ function CodeGenerator() {
         }),
       });
 
+      const data = await response.json();
+      if (data.prUrl) {
+        setStatus(`Success! View PR: ${data.prUrl}`);
+        // Optional: Auto-open the link
+        // window.open(data.prUrl, '_blank');
+      }
+
       if (response.ok) {
         setStatus("Deployment Successful! ✅");
       }
